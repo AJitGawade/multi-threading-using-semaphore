@@ -23,8 +23,8 @@ char *buf;
 
 void* fun1(void * arg1)
 {
+	/* locking */
 	printf("entered in 1\n");
-	unsigned long long int i,add;
 	my_sembuf.sem_num=0;
 	my_sembuf.sem_op=-1;
 	my_sembuf.sem_flg=0;
@@ -35,7 +35,7 @@ void* fun1(void * arg1)
 	printf("%s\n",buf);
 
 	printf("thread 1 finished\n");
-
+	/*unlocking */
 	my_sembuf.sem_num=0;
 	my_sembuf.sem_op=1;
 	my_sembuf.sem_flg=0;
@@ -43,7 +43,7 @@ void* fun1(void * arg1)
 }
 void* fun2(void * arg2)
 {
-	unsigned long long int i,add;
+	/* locking */
 	printf("entered in 2\n");
 	my_sembuf.sem_num=0;
 	my_sembuf.sem_op=-1;
@@ -55,7 +55,7 @@ void* fun2(void * arg2)
 	printf("%s\n",buf);
 
 	printf("thread 2 finished\n");
-
+	/*unlocking */
 	my_sembuf.sem_num=0;
 	my_sembuf.sem_op=1;
 	my_sembuf.sem_flg=0;
@@ -79,7 +79,7 @@ int main()
 	pthread_attr_init(&attribute2);
 
 
-	/* lock it */
+	/* locking */
 	my_sembuf.sem_num=0;
 	my_sembuf.sem_op=-1;
 	my_sembuf.sem_flg=0;
@@ -93,12 +93,12 @@ int main()
 	buf=(char *)malloc(100);
 	scanf("%[^\n]s",buf);
 
-
+	/* unlocking */
 	my_sembuf.sem_num=0;
 	my_sembuf.sem_op=1;
 	my_sembuf.sem_flg=0;
 	semop(semid,&my_sembuf,1);
-	/* unlock it */
+	
 
 	pthread_join(thread1,(void *)&ptr1);
 	pthread_join(thread2,(void *)&ptr2);
